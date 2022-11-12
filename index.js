@@ -37,6 +37,8 @@ const requesListener = (request, response) => {
     if (url === '/') {
         if (method === 'GET') {
             response.end('<h1>Ini adalah homepage</h1>');
+        } else {
+            response.end(`kamu tidak bisa menggunakan method ${method}`)
         }
     } else if (url === '/about') {
         response.end("halaman about");
