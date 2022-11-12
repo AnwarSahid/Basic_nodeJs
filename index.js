@@ -2,21 +2,28 @@
 const http = require('http');
 
 const requesListener = (request, response) => {
-    response.setHeader('Content-type', 'text/html');
-    response.statusCode = 200;
+    response.setHeader('Content-type', 'application/json');
 
     const { method, url } = request;
 
 
     if (url === '/') {
         if (method === 'GET') {
-            response.end('<h1>Ini adalah homepage</h1>');
+            response.statusCode = 200;
+            response.end(JSON.stringify({
+                message: "ini halaman utama"
+            }));
         } else {
-            response.end(`kamu tidak bisa menggunakan method ${method}`)
+            response.statusCode = 400;
+            response.end(JSON.stringify({
+                message: `harus menggunakan get`
+            }))
         }
     } else if (url === '/about') {
         if (method === 'GET') {
-            response.end(`ini halaman about method ${method} `);
+            response.end(JSON.stringify({
+                message: `ini halaman about method ${method} `
+            }));
         } else if (method === 'POST') {
             let body = [];
 
@@ -27,16 +34,25 @@ const requesListener = (request, response) => {
             request.on('end', () => {
                 body = Buffer.concat(body).toString();
                 const { name } = JSON.parse(body);
-                response.end(`<h1>Halo, ${name}! Ini adalah halaman about</h1>`);
+                response.end(JSON.stringify({
+                    message: `Halo, ${name}! Ini adalah halaman about`
+                }));
+                response.statusCode = 200;
             });
         } else {
-            response.end(`maap harus pake get`)
+            response.statusCode = 400;
+            response.end(JSON.stringify({
+                message: 'halaman tidak ditemukan'
+            }))
         }
 
 
 
     } else {
-        response.end("halaman tidak ditemukan");
+        response.statusCode = 400;
+        response.end(JSON.stringify({
+            message: 'halaman tidak ditemukan'
+        }))
     }
 
 
