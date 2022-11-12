@@ -7,32 +7,6 @@ const requesListener = (request, response) => {
 
     const { method, url } = request;
 
-    // if (method === 'PUT') {
-
-    //     response.end('halo ini put');
-    // }
-    // if (method === 'POST') {
-    //     let body = [];
-
-    //     request.on('data', (chunk) => {
-    //         body.push(chunk);
-    //     });
-
-    //     request.on('end', () => {
-    //         body = Buffer.concat(body).toString();
-    //         const { name } = JSON.parse(body)
-    //         response.end(`<h1>Hai, ${name}!</h1>`);
-    //     });
-    // }
-
-    // if (method === 'DELETE') {
-    //     response.end('halo ini delete')
-    // }
-
-    // if (method === 'GET') {
-    //     response.end('halo ini get')
-    // }
-
 
     if (url === '/') {
         if (method === 'GET') {
@@ -41,7 +15,26 @@ const requesListener = (request, response) => {
             response.end(`kamu tidak bisa menggunakan method ${method}`)
         }
     } else if (url === '/about') {
-        response.end("halaman about");
+        if (method === 'GET') {
+            response.end(`ini halaman about method ${method} `);
+        } else if (method === 'POST') {
+            let body = [];
+
+            request.on('data', (chunk) => {
+                body.push(chunk);
+            });
+
+            request.on('end', () => {
+                body = Buffer.concat(body).toString();
+                const { name } = JSON.parse(body);
+                response.end(`<h1>Halo, ${name}! Ini adalah halaman about</h1>`);
+            });
+        } else {
+            response.end(`maap harus pake get`)
+        }
+
+
+
     } else {
         response.end("halaman tidak ditemukan");
     }
